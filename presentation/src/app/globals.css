@@ -1,0 +1,441 @@
+@import "tailwindcss";
+
+:root {
+  --background: #e9f3ff;
+  --foreground: #0f1a2a;
+  --accent: #0d6ba8;
+  --accent-soft: #6bb9f2;
+  --border-muted: rgba(63, 105, 160, 0.15);
+  --card-bg: rgba(255, 255, 255, 0.88);
+  --caption: rgba(15, 26, 42, 0.72);
+}
+
+body {
+  margin: 0;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 12pt;
+  line-height: 1.55;
+  background: var(--background);
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+.deck-body {
+  background: radial-gradient(circle at top left, #f5fbff 0%, #d8e8f6 55%, #c9dcf3 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 36px;
+}
+
+.deck-wrapper {
+  width: min(1080px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.slide-stage {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(236, 246, 255, 0.92));
+  border-radius: 28px;
+  box-shadow: 0 18px 46px rgba(13, 72, 120, 0.18);
+  border: 1px solid var(--border-muted);
+  padding: 48px 64px;
+  position: relative;
+  overflow: hidden;
+  min-height: 620px;
+  display: flex;
+}
+
+.slide-stage::before {
+  content: "";
+  position: absolute;
+  inset: 32px 36px;
+  border-radius: 22px;
+  border: 1px solid rgba(13, 107, 168, 0.12);
+  pointer-events: none;
+}
+
+.slide-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+  z-index: 1;
+  animation: slideFade 0.8s ease forwards;
+}
+
+.slide-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.slide-title {
+  font-size: 18pt;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--foreground);
+}
+
+.slide-subtitle {
+  font-size: 12pt;
+  color: var(--caption);
+  max-width: 72ch;
+}
+
+.slide-body {
+  flex: 1;
+  display: grid;
+  gap: 28px;
+}
+
+.slide-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 32px;
+}
+
+.slide-card {
+  background: rgba(255, 255, 255, 0.88);
+  border-radius: 18px;
+  border: 1px solid rgba(13, 107, 168, 0.14);
+  padding: 24px 28px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(6px);
+}
+
+.accent-bar {
+  width: 72px;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-soft));
+}
+
+.bullet-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.bullet-item {
+  position: relative;
+  padding-left: 22px;
+  opacity: 0;
+  transform: translateY(14px);
+  animation: itemReveal 0.6s ease forwards;
+}
+
+.bullet-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-soft));
+  box-shadow: 0 0 0 2px rgba(13, 107, 168, 0.12);
+}
+
+.diagram {
+  background: rgba(246, 251, 255, 0.9);
+  border-radius: 20px;
+  border: 1px solid rgba(13, 107, 168, 0.18);
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.diagram::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 20%, rgba(107, 185, 242, 0.22), transparent 60%);
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.diagram svg {
+  width: 100%;
+  height: auto;
+}
+
+.timeline {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 18px;
+}
+
+.timeline-card {
+  border-radius: 18px;
+  border: 1px solid rgba(13, 107, 168, 0.16);
+  background: rgba(255, 255, 255, 0.92);
+  padding: 18px 20px;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(16px);
+  animation: itemReveal 0.65s ease forwards;
+}
+
+.timeline-card::before {
+  content: attr(data-quarter);
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 0.9em;
+}
+
+.pie-chart {
+  width: 240px;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  position: relative;
+}
+
+.pie-chart svg {
+  width: 100%;
+  height: 100%;
+}
+
+.pie-labels {
+  display: grid;
+  gap: 12px;
+}
+
+.pie-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(14px);
+  animation: itemReveal 0.6s ease forwards;
+}
+
+.pie-swatch {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+.legendary {
+  display: grid;
+  gap: 10px;
+}
+
+.nav-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 8px;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.nav-button {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 22px;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 12pt;
+  background: linear-gradient(90deg, var(--accent), var(--accent-soft));
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(13, 107, 168, 0.28);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+}
+
+.nav-button:disabled {
+  background: rgba(13, 107, 168, 0.24);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.nav-button:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 28px rgba(13, 107, 168, 0.35);
+  filter: brightness(1.05);
+}
+
+.progress-indicator {
+  font-size: 11pt;
+  color: var(--caption);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.footnote {
+  font-size: 10pt;
+  color: var(--caption);
+}
+
+@keyframes slideFade {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes itemReveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-intro {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: itemReveal 0.8s ease forwards;
+}
+
+.fade-intro[data-delay="1"] {
+  animation-delay: 0.25s;
+}
+
+.fade-intro[data-delay="2"] {
+  animation-delay: 0.45s;
+}
+
+.fade-intro[data-delay="3"] {
+  animation-delay: 0.65s;
+}
+
+.fade-intro[data-delay="4"] {
+  animation-delay: 0.85s;
+}
+
+.diagram path,
+.diagram rect,
+.diagram circle,
+.diagram line,
+.diagram polygon {
+  opacity: 0;
+  animation: diagramDraw 1.6s ease forwards;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.diagram path:nth-child(1),
+.diagram rect:nth-child(1),
+.diagram circle:nth-child(1),
+.diagram line:nth-child(1),
+.diagram polygon:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.diagram path:nth-child(2),
+.diagram rect:nth-child(2),
+.diagram circle:nth-child(2),
+.diagram line:nth-child(2),
+.diagram polygon:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+.diagram path:nth-child(3),
+.diagram rect:nth-child(3),
+.diagram circle:nth-child(3),
+.diagram line:nth-child(3),
+.diagram polygon:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+.diagram path:nth-child(4),
+.diagram rect:nth-child(4),
+.diagram circle:nth-child(4),
+.diagram line:nth-child(4),
+.diagram polygon:nth-child(4) {
+  animation-delay: 0.8s;
+}
+
+.diagram path:nth-child(5),
+.diagram rect:nth-child(5),
+.diagram circle:nth-child(5),
+.diagram line:nth-child(5),
+.diagram polygon:nth-child(5) {
+  animation-delay: 1s;
+}
+
+.diagram path:nth-child(6),
+.diagram rect:nth-child(6),
+.diagram circle:nth-child(6),
+.diagram line:nth-child(6),
+.diagram polygon:nth-child(6) {
+  animation-delay: 1.2s;
+}
+
+.diagram path:nth-child(7),
+.diagram rect:nth-child(7),
+.diagram circle:nth-child(7),
+.diagram line:nth-child(7),
+.diagram polygon:nth-child(7) {
+  animation-delay: 1.4s;
+}
+
+@keyframes diagramDraw {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1024px) {
+  .deck-body {
+    padding: 32px 16px;
+  }
+
+  .slide-stage {
+    padding: 36px 32px;
+    min-height: 520px;
+  }
+
+  .slide-stage::before {
+    inset: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .deck-body {
+    padding: 24px 12px;
+  }
+
+  .slide-stage {
+    padding: 28px 22px;
+    min-height: 460px;
+  }
+
+  .slide-stage::before {
+    inset: 18px;
+  }
+
+  .slide-shell {
+    gap: 24px;
+  }
+
+  .slide-title {
+    font-size: 17pt;
+  }
+}
